@@ -1,7 +1,7 @@
 import {NavLink} from "react-router-dom"
-import {useAuth} from "../hooks/useAuth.ts";
-import {useAuthStore} from "../store/AuthStore.ts";
-import postageHeart from "../assets/postage-heart.svg"
+import {useAuth} from "../../hooks/useAuth.ts";
+import {useAuthStore} from "../../store/AuthStore.ts";
+import postageHeart from "../../assets/postage-heart.svg"
 
 function Header() {
     const {isAuthenticated, login, logout, register} = useAuth();
