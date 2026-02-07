@@ -1,6 +1,6 @@
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "./api.ts";
-import type {ViewListPageDesignForListDto, ViewListPageFolderViewDto} from "../types/api-types.ts";
+import type {FolderDto, ViewListPageDesignForListDto, ViewListPageFolderViewDto} from "../types/api-types.ts";
 
 export const useFolders = (userId: number, rootFolderId?: number) => {
     return useQuery({
@@ -28,5 +28,18 @@ export const useDesignsOfFolder = (folderId: number | undefined) => {
         },
         select: data => data.viewDtoList,
         enabled: !!folderId,
+    })
+}
+
+export const useCreateFolder = (userId: number, parentFolderId: number | undefined) =>{
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (data: FolderDto) => {
+            return await axiosInstance.post('/folders', data);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ['folders', userId, parentFolderId]});
+        },
     })
 }

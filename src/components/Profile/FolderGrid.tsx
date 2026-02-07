@@ -1,9 +1,10 @@
-import {useDesignsOfFolder, useFolders} from "../../api/folderApi.ts";
+import {useCreateFolder, useDesignsOfFolder, useFolders} from "../../api/folderApi.ts";
 import {useState} from "react";
 import {useAuthStore} from "../../store/AuthStore.ts";
 import type {FolderViewDto} from "../../types/api-types.ts";
 import Folder from "./Folder.tsx";
 import Design from "./Design.tsx";
+import {useCreateDesign} from "../../api/desingApi.ts";
 
 function FolderGrid({userId}: { userId: number }) {
     const role = useAuthStore((state) => state.role)
@@ -20,6 +21,8 @@ function FolderGrid({userId}: { userId: number }) {
         isError: isDesignsError,
         data: designs,
     } = useDesignsOfFolder(currentFolder?.id);
+    const { mutate: createFolder } = useCreateFolder(userId, currentFolder?.id);
+    const { mutate: createDesign } = useCreateDesign(currentFolder?.id);
 
 
     const onBackToHomeClick = () => {
@@ -41,11 +44,19 @@ function FolderGrid({userId}: { userId: number }) {
     }
 
     const onCreateFolderClick = () => {
-
+        createFolder({
+            name: "New folder",
+            parentFolderId: currentFolder?.id,
+            creatorUserId: userId,
+        })
     }
 
     const onCreateDesignClick = () => {
-
+        createDesign({
+            name: "New design",
+            folderId: currentFolder?.id,
+            creatorDesignerId: userId,
+        })
     }
 
     if (isFoldersLoading) {
