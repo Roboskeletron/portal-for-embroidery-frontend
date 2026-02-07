@@ -1,6 +1,6 @@
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "./api.ts";
-import type {UserViewDto} from "../types/api-types.ts";
+import type {UserDto, UserViewDto} from "../types/api-types.ts";
 
 export const useProfile = (id: number | null, options?: { enabled?: boolean }) => {
     return useQuery({
@@ -14,4 +14,16 @@ export const useProfile = (id: number | null, options?: { enabled?: boolean }) =
         },
         enabled: options?.enabled
     });
+}
+
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: UserDto) => {
+            return await axiosInstance.put('/users/profile', data);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['profile', null] });
+        }
+    })
 }
