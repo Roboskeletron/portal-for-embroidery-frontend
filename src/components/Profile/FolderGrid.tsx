@@ -73,9 +73,8 @@ function FolderGrid({userId}: { userId: number }) {
                 /{folderStack.map(folder => folder.name).join("/")}</h1><br/>
             <div className="container w-100">
                 <div className="row row-cols-1 row-cols-md-5 g-4 border-top">
-                    {folders?.map(folder => <Folder key={folder.id!} id={folder.id!} name={folder.name!}
-                                                    onClick={onFolderCLick}/>)}
-                    {!isDesignsLoading && !isDesignsError && designs?.map(design => <Design key={design.id!} id={design.id!} name={design.name!} />)}
+                    {folders?.map(folder => <Folder key={folder.id!} id={folder.id!} onClick={onFolderCLick}/>)}
+                    {!isDesignsLoading && !isDesignsError && designs?.map(design => <Design key={design.id!} id={design.id!} />)}
                 </div>
                 <div className="row">
                     <div className="px-0 mt-lg-4">

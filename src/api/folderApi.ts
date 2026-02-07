@@ -1,6 +1,11 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "./api.ts";
-import type {FolderDto, ViewListPageDesignForListDto, ViewListPageFolderViewDto} from "../types/api-types.ts";
+import type {
+    FolderDto,
+    FolderUpdateDto, FolderViewDto,
+    ViewListPageDesignForListDto,
+    ViewListPageFolderViewDto
+} from "../types/api-types.ts";
 
 export const useFolders = (userId: number, rootFolderId?: number) => {
     return useQuery({
@@ -41,5 +46,29 @@ export const useCreateFolder = (userId: number, parentFolderId: number | undefin
         onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ['folders', userId, parentFolderId]});
         },
+    })
+}
+
+export const useUpdateFolder = (folderId: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: FolderUpdateDto) => {
+            return await axiosInstance.put(`/folders/${folderId}`, data);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ['folder', folderId]});
+        }
+    })
+}
+
+export const useFolder = (folderId: number) => {
+    return useQuery({
+        queryKey: ['folder', folderId],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get<FolderViewDto>(`/folders/${folderId}`);
+
+            return data;
+        }
     })
 }
