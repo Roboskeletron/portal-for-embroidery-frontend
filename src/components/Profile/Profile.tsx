@@ -1,11 +1,12 @@
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useProfile} from "../../api/userApi.ts";
 import person from "../../assets/person-square.svg"
+import FolderGrid from "./FolderGrid.tsx";
 
 function Profile() {
-    const { id } = useParams();
-    const { isPending, isError, data, error } = useProfile(id)
-    const profile= data
+    const {id} = useParams();
+    const {isPending, isError, data, error} = useProfile(!id ? null : parseInt(id))
+    const profile = data
 
     const pStyle = {
         fontWeight: 600,
@@ -21,13 +22,13 @@ function Profile() {
 
     return (
         <div className="container p-5 overflow-hidden">
-            <h1 className="h4 mb-5 fw-normal text-center">Profile</h1>
             <div className="container">
                 <div className="row">
                     <div className="col-4">
                         <div className="mb-3">
                             <img src={profile!.base64StringImage
-                                ? `data:image/jpeg;base64,${profile!.base64StringImage}` : person} className="img-fluid" alt=""/>
+                                ? `data:image/jpeg;base64,${profile!.base64StringImage}` : person} className="img-fluid"
+                                 alt=""/>
                         </div>
                         <p><span style={pStyle}>Username:</span> {profile!.username}</p>
                         <p></p>
@@ -46,11 +47,10 @@ function Profile() {
                                 <p><span style={pStyle}>Description:</span> {profile!.description}</p>
                                 <p></p>
                             </>}
-                        {/*{isOwner && <button className="btn btn-lg btn-outline-success w-100 mt-2"*/}
-                        {/*                          onClick={activateEditMode}>Edit</button>}*/}
+                        {!id && <button className="btn btn-lg btn-outline-success w-100 mt-2">Edit</button>}
                     </div>
                     <div className="col-8">
-                        {/*{profile!.id && <FolderGridContainer/>}*/}
+                        {<FolderGrid userId={profile!.id ?? 0}/>}
                     </div>
                 </div>
             </div>

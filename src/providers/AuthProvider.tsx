@@ -1,11 +1,23 @@
 import {type ReactNode, useEffect, useState} from "react";
 import keycloak from "../lib/keycloak.ts";
 import {useAuthStore} from "../store/AuthStore.ts";
+import {useProfile} from "../api/userApi.ts";
 
 export const AuthProvider = ({ children } : {children: ReactNode}) => {
     const [isReady, setIsReady] = useState(false);
     const setAuth = useAuthStore((state) => state.setAuth);
     const logoutStore = useAuthStore((state) => state.logout);
+    const setRole = useAuthStore((state) => state.setRole);
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const { data: profile, isLoading: isProfileLoading } = useProfile(null, {
+        enabled: isAuthenticated && isReady
+    });
+
+    useEffect(() => {
+        if (profile && profile.role) {
+            setRole(profile.role);
+        }
+    }, [profile, setRole]);
 
     useEffect(() => {
         keycloak.onAuthSuccess = () => {
@@ -44,6 +56,10 @@ export const AuthProvider = ({ children } : {children: ReactNode}) => {
 
     if (!isReady) {
         return <div>Loading App...</div>;
+    }
+
+    if (isAuthenticated && isProfileLoading) {
+        return <div>Loading Profile...</div>;
     }
 
     return <>{children}</>;

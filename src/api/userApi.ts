@@ -2,7 +2,7 @@ import {useQuery} from "@tanstack/react-query";
 import axiosInstance from "./api.ts";
 import type {UserViewDto} from "../types/api-types.ts";
 
-export const useProfile = (id: string | undefined) => {
+export const useProfile = (id: number | null, options?: { enabled?: boolean }) => {
     return useQuery({
         queryKey: ['profile', id],
         queryFn: async () => {
@@ -11,6 +11,7 @@ export const useProfile = (id: string | undefined) => {
             const { data } = await axiosInstance.get<UserViewDto>(uri);
 
             return data;
-        }
+        },
+        enabled: options?.enabled
     });
 }
