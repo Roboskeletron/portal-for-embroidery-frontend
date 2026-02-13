@@ -1,5 +1,11 @@
-import {useInfiniteQuery, useMutation, useQueryClient} from "@tanstack/react-query";
-import type {FilteredViewListPagePostForListDto, PostDto} from "../types/api-types.ts";
+import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import type {
+    FilteredViewListPagePostForListDto,
+    PostDto,
+    PostUpdateDto,
+    PostViewDto,
+    TagDto
+} from "../types/api-types.ts";
 import axiosInstance from "./api.ts";
 
 export const useCreatePost = () =>{
@@ -34,6 +40,41 @@ export const useInfinitePosts = (tagName: string | null) => {
             const currentPage = lastPage.pageNumber || 1;
             const totalPages = lastPage.totalPages || 1;
             return currentPage < totalPages ? currentPage + 1 : undefined;
+        }
+    });
+};
+
+export const usePost = (id: number) => {
+    return useQuery({
+        queryKey: ['post', id],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get<PostViewDto>(`/posts/${id}`);
+            return data;
+        },
+        enabled: !!id
+    });
+};
+
+export const useUpdatePost = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (payload: PostUpdateDto) => {
+            await axiosInstance.put(`/posts/${id}`, payload);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['post', id] });
+        }
+    });
+};
+
+export const useUpdatePostTags = (id: number) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (tags: TagDto[]) => {
+            await axiosInstance.put(`/posts/${id}/tags`, tags);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['post', id] });
         }
     });
 };

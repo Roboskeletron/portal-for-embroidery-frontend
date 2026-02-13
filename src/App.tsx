@@ -10,6 +10,7 @@ import AboutUs from "./components/AboutUs/AboutUs.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import PostGrid from "./components/Posts/PostGrid.tsx";
 import PostCreateForm from "./components/Posts/PostCreateForm.tsx";
+import PostProfile from "./components/Posts/PostProfile.tsx";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,8 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/designs" element={<PostGrid />} />
+                            <Route path="/designs/:postId" element={<PostProfile />} />
+                            <Route path="/my-designs" element={<PostGrid />} />
                             <Route path="/profile" element={<Profile />}/>
                             <Route path="/profile/:id" element={<Profile />}/>
                             <Route path="/contacts" element={<Contacts />}/>
