@@ -9,6 +9,7 @@ export const AuthProvider = ({ children } : {children: ReactNode}) => {
     const logoutStore = useAuthStore((state) => state.logout);
     const setRole = useAuthStore((state) => state.setRole);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const setUserId = useAuthStore((state) => state.setUserId);
     const { data: profile, isLoading: isProfileLoading } = useProfile(null, {
         enabled: isAuthenticated && isReady
     });
@@ -16,8 +17,9 @@ export const AuthProvider = ({ children } : {children: ReactNode}) => {
     useEffect(() => {
         if (profile && profile.role) {
             setRole(profile.role);
+            setUserId(profile.id!);
         }
-    }, [profile, setRole]);
+    }, [profile, setRole, setUserId]);
 
     useEffect(() => {
         keycloak.onAuthSuccess = () => {

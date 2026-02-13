@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import type {DesignDto, DesignUpdateDto, DesignViewDto} from "../types/api-types.ts";
+import type {DesignDto, DesignUpdateDto, DesignViewDto, ViewListPageDesignForListDto} from "../types/api-types.ts";
 import axiosInstance from "./api.ts";
 
 export const useCreateDesign = (folderId: number | undefined) => {
@@ -37,4 +37,16 @@ export const useDesign = (id: number) => {
             return data;
         }
     });
+}
+
+export const useDesigns = () => {
+    return useQuery({
+        queryKey: ['designs'],
+        queryFn: async () => {
+            const {data} = await axiosInstance.get<ViewListPageDesignForListDto>(`/designs`);
+
+            return data;
+        },
+        select: data => data.viewDtoList
+    })
 }

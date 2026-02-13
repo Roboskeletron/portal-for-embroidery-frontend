@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axiosInstance from "./api.ts";
-import type {UserDto, UserViewDto} from "../types/api-types.ts";
+import type {UserDto, UserViewDto, ViewListPageUserForListDto} from "../types/api-types.ts";
 
 export const useProfile = (id: number | null, options?: { enabled?: boolean }) => {
     return useQuery({
@@ -25,5 +25,17 @@ export const useUpdateProfile = () => {
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['profile', null] });
         }
+    })
+}
+
+export const useDesigners = () => {
+    return useQuery({
+        queryKey: ['designers'],
+        queryFn: async () => {
+            const {data} = await axiosInstance.get<ViewListPageUserForListDto>('/users/designers');
+
+            return data;
+        },
+        select: data => data.viewDtoList,
     })
 }

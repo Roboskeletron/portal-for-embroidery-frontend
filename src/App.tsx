@@ -8,6 +8,8 @@ import Profile from "./components/Profile/Profile.tsx";
 import Contacts from "./components/Contacts/Contacts.tsx";
 import AboutUs from "./components/AboutUs/AboutUs.tsx";
 import Footer from "./components/Footer/Footer.tsx";
+import PostGrid from "./components/Posts/PostGrid.tsx";
+import PostCreateForm from "./components/Posts/PostCreateForm.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,11 +22,12 @@ function App() {
                         <Header />
                         <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/designs" element={<h1>Designs List (Todo)</h1>}/>
+                            <Route path="/designs" element={<PostGrid />} />
                             <Route path="/profile" element={<Profile />}/>
                             <Route path="/profile/:id" element={<Profile />}/>
                             <Route path="/contacts" element={<Contacts />}/>
                             <Route path="/about-us" element={<AboutUs />}/>
+                            <Route path="/posts/new" element={<PostCreateForm />} />
                         </Routes>
                         <Footer />
                     </div>
