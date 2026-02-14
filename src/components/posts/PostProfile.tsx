@@ -4,11 +4,14 @@ import { useAuthStore } from "../../store/AuthStore";
 import { usePost, useUpdatePost, useUpdatePostTags } from "../../api/postApi";
 // Import your Carousel or a simple Image viewer here
 import Carousel from "../common/Carousel";
-import {PostUpdateForm} from "./PostUpdateForm.tsx";
-import {TagsCreateForm} from "./TagsCreateForm.tsx";
-import {CommentList} from "../comments/CommentList.tsx"; // Assuming you kept this component
+import { PostUpdateForm } from "./PostUpdateForm.tsx";
+import { TagsCreateForm } from "./TagsCreateForm.tsx";
+import { CommentList } from "../comments/CommentList.tsx";
+// 1. Import the ModelPanel
+import ModelPanel from "../common/ModelPanel";
 
-type ViewMode = 'VIEW' | 'EDIT' | 'TAGS';
+// 2. Add 'MODEL' to the allowed modes
+type ViewMode = 'VIEW' | 'EDIT' | 'TAGS' | 'MODEL';
 
 const PostProfile = () => {
     const { postId } = useParams<{ postId: string }>();
@@ -67,7 +70,17 @@ const PostProfile = () => {
         );
     }
 
-    // C. View Mode (Default)
+    // C. Model (3D) Mode
+    if (mode === 'MODEL') {
+        return (
+            <ModelPanel
+                files={post.files}
+                onBack={() => setMode('VIEW')}
+            />
+        );
+    }
+
+    // D. View Mode (Default)
     const canEdit = isAuthenticated && (role === "ADMIN" || role === "DESIGNER");
 
     return (
@@ -125,7 +138,7 @@ const PostProfile = () => {
 
                     {/* Buttons */}
                     <div className="d-grid gap-2 mt-5">
-                        <button className="btn btn-outline-success" onClick={() => console.log("Show Model Logic")}>
+                        <button className="btn btn-outline-success" onClick={() => setMode('MODEL')}>
                             Show Model (3D)
                         </button>
 
@@ -149,8 +162,8 @@ const PostProfile = () => {
 
             <hr className="my-5"/>
 
-            {/* Comments Section would go here */}
-             <CommentList postId={Number(postId)} />
+            {/* Comments Section */}
+            <CommentList postId={Number(postId)} />
         </div>
     );
 };
