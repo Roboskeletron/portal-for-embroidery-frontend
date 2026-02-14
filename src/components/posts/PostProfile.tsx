@@ -5,7 +5,8 @@ import { usePost, useUpdatePost, useUpdatePostTags } from "../../api/postApi";
 // Import your Carousel or a simple Image viewer here
 import Carousel from "../common/Carousel";
 import {PostUpdateForm} from "./PostUpdateForm.tsx";
-import {TagsCreateForm} from "./TagsCreateForm.tsx"; // Assuming you kept this component
+import {TagsCreateForm} from "./TagsCreateForm.tsx";
+import {CommentList} from "../comments/CommentList.tsx"; // Assuming you kept this component
 
 type ViewMode = 'VIEW' | 'EDIT' | 'TAGS';
 
@@ -146,8 +147,10 @@ const PostProfile = () => {
                 </div>
             </div>
 
+            <hr className="my-5"/>
+
             {/* Comments Section would go here */}
-            {/* <CommentList postId={post.id} /> */}
+             <CommentList postId={Number(postId)} />
         </div>
     );
 };

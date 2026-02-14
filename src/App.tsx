@@ -1,16 +1,16 @@
 import './App.css'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import Header from "./components/Header/Header.tsx";
+import Header from "./components/header/Header.tsx";
 import {AuthProvider} from "./providers/AuthProvider.tsx";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Home from "./components/Home/Home.tsx";
-import Profile from "./components/Profile/Profile.tsx";
-import Contacts from "./components/Contacts/Contacts.tsx";
+import Home from "./components/home/Home.tsx";
+import Profile from "./components/profile/Profile.tsx";
+import Contacts from "./components/contacts/Contacts.tsx";
 import AboutUs from "./components/AboutUs/AboutUs.tsx";
-import Footer from "./components/Footer/Footer.tsx";
-import PostGrid from "./components/Posts/PostGrid.tsx";
-import PostCreateForm from "./components/Posts/PostCreateForm.tsx";
-import PostProfile from "./components/Posts/PostProfile.tsx";
+import Footer from "./components/footer/Footer.tsx";
+import PostGrid from "./components/posts/PostGrid.tsx";
+import PostCreateForm from "./components/posts/PostCreateForm.tsx";
+import PostProfile from "./components/posts/PostProfile.tsx";
 
 const queryClient = new QueryClient();
 

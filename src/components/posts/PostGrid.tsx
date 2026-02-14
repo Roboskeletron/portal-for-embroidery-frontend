@@ -41,7 +41,7 @@ const PostGrid = () => {
         <div className="container py-5 overflow-hidden">
             <h1 className="h4 fw-normal text-center mb-4">Designs {searchTag && `(Tag: #${searchTag})`}</h1>
 
-            {/* Controls Header */}
+            {/* Controls header */}
             <div className="container pb-5">
                 <div className="row g-3 align-items-center">
                     {/* Left Buttons */}
