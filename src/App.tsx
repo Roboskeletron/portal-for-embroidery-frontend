@@ -6,7 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./components/home/Home.tsx";
 import Profile from "./components/profile/Profile.tsx";
 import Contacts from "./components/contacts/Contacts.tsx";
-import AboutUs from "./components/AboutUs/AboutUs.tsx";
+import AboutUs from "./components/aboutUs/AboutUs.tsx";
 import Footer from "./components/footer/Footer.tsx";
 import PostGrid from "./components/posts/PostGrid.tsx";
 import PostCreateForm from "./components/posts/PostCreateForm.tsx";

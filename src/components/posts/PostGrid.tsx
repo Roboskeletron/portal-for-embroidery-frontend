@@ -7,7 +7,7 @@ import Post from "./Post.tsx";
 
 const PostGrid = () => {
     const navigate = useNavigate();
-    const { isAuthenticated, role } = useAuthStore();
+    const { isAuthenticated, role, userId } = useAuthStore();
     const [searchTag, setSearchTag] = useState<string | null>(null);
 
     // 1. Fetch Data
@@ -18,7 +18,7 @@ const PostGrid = () => {
         hasNextPage,
         isFetchingNextPage,
         status
-    } = useInfinitePosts(searchTag);
+    } = useInfinitePosts(userId, searchTag);
 
     // 2. Handlers
     const handleSearch = (term: string) => {

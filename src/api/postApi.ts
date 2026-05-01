@@ -1,6 +1,6 @@
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import type {
-    FilteredViewListPagePostForListDto,
+    FilteredViewListPagePostForListDto, LikeDto,
     PostDto,
     PostUpdateDto,
     PostViewDto,
@@ -21,13 +21,15 @@ export const useCreatePost = () =>{
     })
 }
 
-export const useInfinitePosts = (tagName: string | null) => {
+export const useInfinitePosts = (userId: number | null, tagName: string | null) => {
     return useInfiniteQuery({
         // The key includes the tag, so caching separates searches from the main feed
         queryKey: ['posts', 'infinite', tagName],
         queryFn: async ({ pageParam = 1 }) => {
-            // Logic: If tag exists, use search endpoint, otherwise get all
-            const url = tagName
+            let url = userId
+                ? `/users/${userId}`
+                : "";
+            url += tagName
                 ? `/posts?tagName=${tagName}&page=${pageParam}&size=8`
                 : `/posts?page=${pageParam}&size=8`;
 
@@ -75,6 +77,45 @@ export const useUpdatePostTags = (id: number) => {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ['post', id] });
+        }
+    });
+};
+
+export const useLikePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ postId, userId }: { postId: number; userId: number }) => {
+            const payload: LikeDto = { userId };
+            await axiosInstance.post(`/posts/${postId}/like`, payload);
+        },
+        onSuccess: async () => {
+            // Refetch posts to update the heart icon and count
+            await queryClient.invalidateQueries({ queryKey: ['posts'] });
+        }
+    });
+};
+
+export const useDislikePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ postId, userId }: { postId: number; userId: number }) => {
+            const payload: LikeDto = { userId };
+            await axiosInstance.post(`/posts/${postId}/dislike`, payload);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['posts'] });
+        }
+    });
+};
+
+export const useDeletePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (postId: number) => {
+            await axiosInstance.delete(`/posts/${postId}`);
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({queryKey: ['posts']});
         }
     });
 };
